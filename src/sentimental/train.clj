@@ -6,15 +6,15 @@
         [clojure.pprint]
         [clojure.java.io]))
 
-(def tokenizer (make-tokenizer "src/models/en-token.bin"))
-(def senti-model (train-document-categorization "src/models/sentiment.train"))
+(def tokenizer (make-tokenizer (resource "en-token.bin")))
+(def senti-model (train-document-categorization (resource "sentiment.train")))
 
 (defn get-lines [fname]
-  (with-open [r (reader fname)]
+  (with-open [r (resource fname)]
     (doall (line-seq r))))
 
 (defn temp-corpus []
-	(get-lines "resources/subjectivity_lexicon.tff"))
+	(get-lines (resource  "subjectivity_lexicon.tff")))
 
 (defn create-hashmap [l]
 	(let [a (map #(string/split % #"=") l)
@@ -60,14 +60,14 @@
 
 (defn append-stemmed-to-file [subj type]
   (map  (fn [h] (append-to-file (create-train-str h)
-                                "src/models/sentiment.train"))
+                                (resource "sentiment.train")))
         (by-type (by-subj (stemmed-only (corpus)) 
                           subj)
                   type)))
 
 (defn append-all-to-file [subj type]
   (map  (fn [h] (append-to-file (create-train-str h)
-                                "src/models/sentiment.train"))
+                                (resource "sentiment.train")))
         (by-type (by-subj (corpus) 
                           subj)
                   type)))
@@ -78,7 +78,4 @@
 ; (append-all-to-file "weaksubj" "negative")
 ; (append-all-to-file "strongsubj" "neutral")
 ; (append-all-to-file "weaksubj" "neutral")
-
-
-
 

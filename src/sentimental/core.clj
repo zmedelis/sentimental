@@ -7,13 +7,13 @@
 
 
 (def eng-stemmer (stemmer "english"))
-(def tokenizer (make-tokenizer "src/models/en-token.bin"))
-(def detokenizer (make-detokenizer "src/models/english-detokenizer.xml"))
+(def tokenizer (make-tokenizer (resource "en-token.bin")))
+(def detokenizer (make-detokenizer (resource "english-detokenizer.xml")))
 ; the actual categorizer
 (def categorize (make-document-categorizer tr/senti-model))
 
 (defn stop-words []
-	(set (sentimental.train/get-lines "resources/stop_words.txt")))
+	(set (sentimental.train/get-lines (resource "stop_words.txt"))))
 
 (defn strip-stop-words [l]
 	(filter (fn [x] (not (contains? (stop-words) x)))
